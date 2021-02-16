@@ -115,3 +115,4 @@ class Inspector:
         for workstation in self.workstations:
             if not workstation.buffer_full(component):
                 workstation.add_to_buffer(component)
+                return
