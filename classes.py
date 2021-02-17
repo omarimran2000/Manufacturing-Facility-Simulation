@@ -83,6 +83,10 @@ class Workstation:
         self.products_made += 1
 
     def workstation_process(self):
+        """
+        Process to be run by SimPy environment
+        :return: None
+        """
         while True:
             if self.all_components_available():  # wait for all components to be available
                 process_time = self.processing_times.pop(0)
@@ -149,9 +153,17 @@ class Inspector:
                 return workstation
 
     def choose_random_component(self) -> Component:
+        """
+        Returns a randomly chosen component for the inspector
+        :return: a component
+        """
         return self.components[random.randint(0, len(self.components) - 1)]
 
     def inspector_process(self):
+        """
+        Process to be run by SimPy environment
+        :return: None
+        """
         while True:
             component = self.choose_random_component()
             delay = self.processing_times[component].pop(0)
