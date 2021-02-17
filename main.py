@@ -11,7 +11,7 @@ def dat_parser(filename: str) -> list:
     :param filename: the .dat file to be opened
     :return:
     """
-    return np.loadtxt(filename)
+    return list(np.loadtxt(filename))
 
 
 if __name__ == "__main__":
@@ -39,3 +39,4 @@ if __name__ == "__main__":
     inspector1 = Inspector(env, "Inspector 1", [component1], [insp1_time], [workstation1, workstation2, workstation3])
     inspector2 = Inspector(env, "Inspector 2", [component2, component3], [insp22_time, insp23_time],
                            [workstation2, workstation3])
+    env.run(until=3000)

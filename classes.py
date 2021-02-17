@@ -1,3 +1,5 @@
+import random
+
 import simpy
 
 
@@ -41,6 +43,7 @@ class Workstation:
         self.env = env
         self.processing_times = processing_times
         self.products_made = 0
+        env.process(self.workstation_process())
 
     def add_to_buffer(self, component: Component) -> None:
         """
@@ -79,6 +82,17 @@ class Workstation:
 
         self.products_made += 1
 
+    def workstation_process(self):
+        while True:
+            if self.all_components_available():  # wait for all components to be available
+                process_time = self.processing_times.pop(0)
+                yield self.env.timeout(process_time)
+                print(self.name, " created ", self.product.name, " at ", round(self.env.now, 2),
+                      " minutes")
+                self.produce()
+            else:
+                yield self.env.timeout(0.01)
+
 
 class Inspector:
 
@@ -103,6 +117,7 @@ class Inspector:
             count += 1
 
         self.workstations = workstations
+        self.env.process(self.inspector_process())
 
     def is_blocked(self, component: Component) -> bool:
         """
@@ -116,14 +131,34 @@ class Inspector:
                     return False
         return True
 
-    def send_component(self, component: Component) -> None:
+    def send_component(self, component: Component) -> Workstation:
         """
         Used to send a component to the workstation
 
         :param component: sends component to an available workstation
-        :return: None
+        :return: the workstation where it is sent
         """
+        min_buffer = 2
         for workstation in self.workstations:
-            if not workstation.buffer_full(component):
+            if component in workstation.buffers.keys() and workstation.buffers[component] < min_buffer:
+                min_buffer = workstation.buffers[component]
+        for workstation in self.workstations:
+            if component in workstation.buffers.keys() and not workstation.buffer_full(component) and \
+                    workstation.buffers[component] == min_buffer:
                 workstation.add_to_buffer(component)
-                return
+                return workstation
+
+    def choose_random_component(self) -> Component:
+        return self.components[random.randint(0, len(self.components) - 1)]
+
+    def inspector_process(self):
+        while True:
+            component = self.choose_random_component()
+            delay = self.processing_times[component].pop(0)
+            yield self.env.timeout(delay)  # allow delay for processing times
+
+            while self.is_blocked(component):  # waits for buffers to free
+                yield self.env.timeout(0.01)
+            destination = self.send_component(component)
+            print(self.name, " sent ", component.name, " to ", destination.name, " at ", round(self.env.now, 2),
+                  " minutes")
