@@ -40,6 +40,7 @@ class Workstation:
             self.buffers[i] = 0
         self.env = env
         self.processing_times = processing_times
+        self.products_made = 0
 
     def add_to_buffer(self, component: Component) -> None:
         """
@@ -67,6 +68,16 @@ class Workstation:
             if self.buffers[i] == 0:
                 return False
         return True
+
+    def produce(self) -> None:
+        """
+        Creates one product after all the components are available
+        :return: None
+        """
+        for i in self.buffers.keys():
+            self.buffers[i] -= 1
+
+        self.products_made += 1
 
 
 class Inspector:
