@@ -44,6 +44,7 @@ class Workstation:
         self.processing_times = processing_times
         self.products_made = 0
         env.process(self.workstation_process())
+        self.wait_time = 0
 
     def add_to_buffer(self, component: Component) -> None:
         """
@@ -95,7 +96,8 @@ class Workstation:
                       " minutes")
                 self.produce()
             else:
-                yield self.env.timeout(0.01)
+                yield self.env.timeout(0.001)
+                self.wait_time += 0.001
 
 
 class Inspector:
@@ -122,6 +124,7 @@ class Inspector:
 
         self.workstations = workstations
         self.env.process(self.inspector_process())
+        self.blocked_time = 0
 
     def is_blocked(self, component: Component) -> bool:
         """
@@ -170,7 +173,8 @@ class Inspector:
             yield self.env.timeout(delay)  # allow delay for processing times
 
             while self.is_blocked(component):  # waits for buffers to free
-                yield self.env.timeout(0.01)
+                yield self.env.timeout(0.001)
+                self.blocked_time += 0.001
             destination = self.send_component(component)
             print(self.name, " sent ", component.name, " to ", destination.name, " at ", round(self.env.now, 2),
                   " minutes")
