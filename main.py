@@ -41,9 +41,14 @@ if __name__ == "__main__":
                            [workstation2, workstation3])
     env.run(until=3000)
 
+    print("")
     print(inspector1.name, " wait time: ", inspector1.blocked_time)
     print(inspector2.name, " wait time: ", inspector2.blocked_time)
-
+    print("")
     print(workstation1.name, " wait time: ", workstation1.wait_time)
     print(workstation2.name, " wait time: ", workstation2.wait_time)
     print(workstation3.name, " wait time: ", workstation3.wait_time)
+    print("")
+    print("Workstation 1 Products Made: ", workstation1.products_made)
+    print("Workstation 2 Products Made: ", workstation2.products_made)
+    print("Workstation 3 Products Made: ", workstation3.products_made)

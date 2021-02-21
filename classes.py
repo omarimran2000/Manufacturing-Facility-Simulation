@@ -15,7 +15,7 @@ class Component:
 
 class Product:
 
-    def __init__(self, name: str, required_components: list[Component]):
+    def __init__(self, name: str, required_components: list):
         """
         Constructor for product
         :param name: of the product
@@ -89,21 +89,22 @@ class Workstation:
         :return: None
         """
         while True:
-            if self.all_components_available():  # wait for all components to be available
-                process_time = self.processing_times.pop(0)
-                yield self.env.timeout(process_time)
-                print(self.name, " created ", self.product.name, " at ", round(self.env.now, 2),
-                      " minutes")
-                self.produce()
-            else:
+
+            while not self.all_components_available():  # wait for all components to be available
                 yield self.env.timeout(0.001)
                 self.wait_time += 0.001
+
+            process_time = self.processing_times.pop(0)
+            yield self.env.timeout(process_time)
+            print(self.name, " created ", self.product.name, " at ", round(self.env.now, 2),
+                  " minutes")
+            self.produce()
 
 
 class Inspector:
 
-    def __init__(self, env: simpy.Environment, name: str, components: list[Component], processing_times: list[list],
-                 workstations: list[Workstation]):
+    def __init__(self, env: simpy.Environment, name: str, components: list, processing_times: list,
+                 workstations: list):
         """
         Constructor for an inspector
         :param env: the environment the inspector will be
