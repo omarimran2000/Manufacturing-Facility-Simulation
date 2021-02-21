@@ -39,7 +39,7 @@ if __name__ == "__main__":
     inspector1 = Inspector(env, "Inspector 1", [component1], [insp1_time], [workstation1, workstation2, workstation3])
     inspector2 = Inspector(env, "Inspector 2", [component2, component3], [insp22_time, insp23_time],
                            [workstation2, workstation3])
-    env.run(until=3000)
+    env.run(until=2500)
 
     print("")
     print(inspector1.name, " wait time: ", inspector1.blocked_time)
