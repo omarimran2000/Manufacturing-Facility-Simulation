@@ -46,30 +46,6 @@ class Workstation:
         env.process(self.workstation_process())
         self.wait_time = 0
 
-    def add_to_buffer(self, component: Component) -> None:
-        """
-        Adds component to the buffer
-        :param component: the component to be added
-        :return: None
-        """
-        yield self.buffers[component].put(1)
-
-    def produce(self) -> None:
-        """
-        Creates one product after all the components are available
-        :return: None
-        """
-
-        self.products_made += 1
-
-    def buffer_full(self, component: Component) -> bool:
-        """
-        Checks to see if the buffer for a particular component is full
-        :param component: the component to be checked
-        :return: if it is full or not
-        """
-        return self.buffers[component].level >= 2
-
     def workstation_process(self):
         """
         Process to be run by SimPy environment
@@ -86,7 +62,7 @@ class Workstation:
             yield self.env.timeout(process_time)
             print(self.name, " created ", self.product.name, " at ", round(self.env.now, 2),
                   " minutes")
-            self.produce()
+            self.products_made += 1
 
 
 class Inspector:
@@ -117,7 +93,7 @@ class Inspector:
 
     def send_component(self, component: Component) -> Workstation:
         """
-        Used to send a component to the workstation
+        Used to find the workstation with the minimal buffer
 
         :param component: sends component to an available workstation
         :return: the workstation where it is sent
