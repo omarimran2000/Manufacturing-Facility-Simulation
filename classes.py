@@ -57,7 +57,8 @@ class Workstation:
                 yield self.buffers[i].get(1)  # try to get one component from each of the buffers
 
             self.wait_time += (self.env.now - before_time)
-
+            print(self.name, " creating ", self.product.name, " at ", round(self.env.now, 2),
+                  " minutes")
             process_time = self.processing_times.pop(0)
             yield self.env.timeout(process_time)
             print(self.name, " created ", self.product.name, " at ", round(self.env.now, 2),
