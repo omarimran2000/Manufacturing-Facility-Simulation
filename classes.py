@@ -39,7 +39,7 @@ class Workstation:
         self.product = product
         self.buffers = {}
         for i in product.required_components:
-            self.buffers[i] = 0
+            self.buffers[i] = simpy.Container(env, 2)
         self.env = env
         self.processing_times = processing_times
         self.products_made = 0
@@ -52,36 +52,23 @@ class Workstation:
         :param component: the component to be added
         :return: None
         """
-        self.buffers[component] += 1
-
-    def buffer_full(self, component: Component) -> bool:
-        """
-        Checks to see if the buffer for a particular component is full
-
-        :param component: the component to be checked
-        :return: if it is full or not
-        """
-        return self.buffers[component] >= 2
-
-    def all_components_available(self) -> bool:
-        """
-        Checks to see if all the components are available to build the product
-        :return: if product is ready to be built
-        """
-        for i in self.buffers.keys():
-            if self.buffers[i] == 0:
-                return False
-        return True
+        yield self.buffers[component].put(1)
 
     def produce(self) -> None:
         """
         Creates one product after all the components are available
         :return: None
         """
-        for i in self.buffers.keys():
-            self.buffers[i] -= 1
 
         self.products_made += 1
+
+    def buffer_full(self, component: Component) -> bool:
+        """
+        Checks to see if the buffer for a particular component is full
+        :param component: the component to be checked
+        :return: if it is full or not
+        """
+        return self.buffers[component].level >= 2
 
     def workstation_process(self):
         """
@@ -89,10 +76,11 @@ class Workstation:
         :return: None
         """
         while True:
+            before_time = self.env.now
+            for i in self.buffers.keys():
+                yield self.buffers[i].get(1)  # try to get one component from each of the buffers
 
-            while not self.all_components_available():  # wait for all components to be available
-                yield self.env.timeout(0.001)
-                self.wait_time += 0.001
+            self.wait_time += (self.env.now - before_time)
 
             process_time = self.processing_times.pop(0)
             yield self.env.timeout(process_time)
@@ -127,18 +115,6 @@ class Inspector:
         self.env.process(self.inspector_process())
         self.blocked_time = 0
 
-    def is_blocked(self, component: Component) -> bool:
-        """
-        Checks to see if an inspector is blocked
-        :param component: the component the inspector needs to send to the workstation
-        :return: blocked or not
-        """
-        for workstation in self.workstations:
-            if component in workstation.buffers.keys():
-                if not workstation.buffer_full(component):
-                    return False
-        return True
-
     def send_component(self, component: Component) -> Workstation:
         """
         Used to send a component to the workstation
@@ -147,13 +123,12 @@ class Inspector:
         :return: the workstation where it is sent
         """
         min_buffer = 2
+
         for workstation in self.workstations:
-            if component in workstation.buffers.keys() and workstation.buffers[component] < min_buffer:
-                min_buffer = workstation.buffers[component]
+            if component in workstation.buffers.keys() and workstation.buffers[component].level < min_buffer:
+                min_buffer = workstation.buffers[component].level
         for workstation in self.workstations:
-            if component in workstation.buffers.keys() and not workstation.buffer_full(component) and \
-                    workstation.buffers[component] == min_buffer:
-                workstation.add_to_buffer(component)
+            if component in workstation.buffers.keys() and workstation.buffers[component].level == min_buffer:
                 return workstation
 
     def choose_random_component(self) -> Component:
@@ -173,9 +148,11 @@ class Inspector:
             delay = self.processing_times[component].pop(0)
             yield self.env.timeout(delay)  # allow delay for processing times
 
-            while self.is_blocked(component):  # waits for buffers to free
-                yield self.env.timeout(0.001)
-                self.blocked_time += 0.001
+            before_time = self.env.now
+
             destination = self.send_component(component)
+            yield destination.buffers[component].put(1)  # try to put component inside buffer
+            self.blocked_time += (self.env.now - before_time)
+
             print(self.name, " sent ", component.name, " to ", destination.name, " at ", round(self.env.now, 2),
                   " minutes")
