@@ -53,14 +53,16 @@ class Workstation:
         """
         while True:
             before_time = self.env.now
-            for i in self.buffers.keys():
+            for i in self.buffers.keys():  # wait until all components are available
                 yield self.buffers[i].get(1)  # try to get one component from each of the buffers
 
             self.wait_time += (self.env.now - before_time)
             print(self.name, " creating ", self.product.name, " at ", round(self.env.now, 2),
                   " minutes")
+            # generate random processing time from input list
             process_time = self.processing_times.pop(random.randint(0, len(self.processing_times) - 1))
             yield self.env.timeout(process_time)
+
             print(self.name, " created ", self.product.name, " at ", round(self.env.now, 2),
                   " minutes")
             self.products_made += 1
@@ -127,8 +129,10 @@ class Inspector:
 
             before_time = self.env.now
 
+            # try to put component inside buffer or wait until buffer is free
             destination = self.send_component(component)
-            yield destination.buffers[component].put(1)  # try to put component inside buffer
+            yield destination.buffers[component].put(1)
+
             self.blocked_time += (self.env.now - before_time)
 
             print(self.name, " sent ", component.name, " to ", destination.name, " at ", round(self.env.now, 2),
