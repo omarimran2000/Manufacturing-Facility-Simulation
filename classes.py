@@ -59,7 +59,7 @@ class Workstation:
             self.wait_time += (self.env.now - before_time)
             print(self.name, " creating ", self.product.name, " at ", round(self.env.now, 2),
                   " minutes")
-            process_time = self.processing_times.pop(0)
+            process_time = self.processing_times.pop(random.randint(0, len(self.processing_times) - 1))
             yield self.env.timeout(process_time)
             print(self.name, " created ", self.product.name, " at ", round(self.env.now, 2),
                   " minutes")
@@ -122,7 +122,7 @@ class Inspector:
         """
         while True:
             component = self.choose_random_component()
-            delay = self.processing_times[component].pop(0)
+            delay = self.processing_times[component].pop(random.randint(0, len(self.processing_times[component]) - 1))
             yield self.env.timeout(delay)  # allow delay for processing times
 
             before_time = self.env.now
