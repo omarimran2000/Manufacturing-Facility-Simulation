@@ -1,5 +1,4 @@
 import random
-
 import simpy
 
 
@@ -57,13 +56,13 @@ class Workstation:
                 yield self.buffers[i].get(1)  # try to get one component from each of the buffers
 
             self.wait_time += (self.env.now - before_time)
-            print(self.name, " creating ", self.product.name, " at ", round(self.env.now, 2),
+            print(self.name, " creating ", self.product.name, " at ", round(self.env.now, 3),
                   " minutes")
             # generate random processing time from input list
             process_time = self.processing_times.pop(random.randint(0, len(self.processing_times) - 1))
             yield self.env.timeout(process_time)
 
-            print(self.name, " created ", self.product.name, " at ", round(self.env.now, 2),
+            print(self.name, " created ", self.product.name, " at ", round(self.env.now, 3),
                   " minutes")
             self.products_made += 1
 
@@ -135,5 +134,5 @@ class Inspector:
 
             self.blocked_time += (self.env.now - before_time)
 
-            print(self.name, " sent ", component.name, " to ", destination.name, " at ", round(self.env.now, 2),
+            print(self.name, " sent ", component.name, " to ", destination.name, " at ", round(self.env.now, 3),
                   " minutes")

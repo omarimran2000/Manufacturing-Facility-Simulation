@@ -14,6 +14,7 @@ def dat_parser(filename: str) -> list:
     return list(np.loadtxt(filename))
 
 
+# Main Script
 if __name__ == "__main__":
     insp1_time = dat_parser("data_files/servinsp1.dat")
     insp22_time = dat_parser("data_files/servinsp22.dat")
