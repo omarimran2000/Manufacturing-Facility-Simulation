@@ -15,13 +15,27 @@ should be installed, so the external libraries can be downloaded.
 The simulation relies on the libraries NumPy and SimPy in order to run. 
 To install these libraries, you need to have "pip" downloaded when downloading 
 Python. </br>
+
+Installation on Ubuntu (Debian) 
+```
+$ apt-get install pip
+$ pip install simpy
+$ pip install numpy
+```
+
 Once pip is installed, in your terminal/command prompt, you need to 
-type *pip install simpy* and *pip install numpy* to install these libraries. 
+type *pip install simpy* and *pip install numpy* to install these libraries as shown above. 
 
 ## Running The Simulation 
  The simulation can be run by using a Python IDE (i.e. PyCharm) or by typing
  *python main.py* in the terminal/command prompt while in the same folder as 
  main.py. This will run the main script and run the simulation until 2500 minutes. 
+ 
+ Running on Ubuntu (Debian)
+ ```
+$ cd Manufacturing-Facility-Simulation
+$ python main.py
+```
  
 ## Resources 
 
