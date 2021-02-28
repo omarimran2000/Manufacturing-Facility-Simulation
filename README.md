@@ -8,7 +8,7 @@ classes.py contains all the classes needed to run the simulation
 (i.e. Inspector, Workstation, Product, Component). The simulation should be run 
 on Python 3.7 or above. 
 
-##Installation Instructions
+## Installation Instructions
 Python needs to be downloaded in order for the simulation to run. 
 When downloading Python, it will ask to install "pip"  as well which 
 should be installed, so the external libraries can be downloaded.
@@ -18,7 +18,7 @@ Python. </br>
 Once pip is installed, in your terminal/command prompt, you need to 
 type *pip install simpy* and *pip install numpy* to install these libraries. 
 
-##Running The Simulation 
+## Running The Simulation 
  The simulation can be run by using a Python IDE (i.e. PyCharm) or by typing
  *python main.py* in the terminal/command prompt while in the same folder as 
  main.py. This will run the main script and run the simulation until 2500 minutes. 
