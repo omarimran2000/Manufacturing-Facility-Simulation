@@ -4,6 +4,9 @@ import numpy as np
 import simpy
 from classes import Product, Component, Workstation, Inspector
 
+SIZE = 300
+default = False
+
 
 def dat_parser(filename: str) -> list:
     """
@@ -14,14 +17,33 @@ def dat_parser(filename: str) -> list:
     return list(np.loadtxt(filename))
 
 
+def generate_input(mean: int) -> list:
+    """
+    Generate a random exponential distribution
+    :param mean: mean of the distribution
+    :return: a list of numbers
+    """
+    return list(np.random.exponential(mean, SIZE))
+
+
 # Main Script
 if __name__ == "__main__":
-    insp1_time = dat_parser("data_files/servinsp1.dat")
-    insp22_time = dat_parser("data_files/servinsp22.dat")
-    insp23_time = dat_parser("data_files/servinsp23.dat")
-    ws1_time = dat_parser("data_files/ws1.dat")
-    ws2_time = dat_parser("data_files/ws2.dat")
-    ws3_time = dat_parser("data_files/ws3.dat")
+    if default:
+        insp1_time = dat_parser("data_files/servinsp1.dat")
+        insp22_time = dat_parser("data_files/servinsp22.dat")
+        insp23_time = dat_parser("data_files/servinsp23.dat")
+        ws1_time = dat_parser("data_files/ws1.dat")
+        ws2_time = dat_parser("data_files/ws2.dat")
+        ws3_time = dat_parser("data_files/ws3.dat")
+    else:
+        MEANS = {"insp1_time": 10.35791, "insp22_time": 15.53690333, "insp23_time": 20.63275667,
+                 "ws1_time": 4.604416667, "ws2_time": 11.09260667, "ws3_time": 8.79558}
+        insp1_time = generate_input(MEANS["insp1_time"])
+        insp22_time = generate_input(MEANS["insp22_time"])
+        insp23_time = generate_input(MEANS["insp23_time"])
+        ws1_time = generate_input(MEANS["ws1_time"])
+        ws2_time = generate_input(MEANS["ws2_time"])
+        ws3_time = generate_input(MEANS["ws3_time"])
 
     env = simpy.Environment()
 
