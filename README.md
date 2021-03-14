@@ -2,7 +2,7 @@
 ## Milestone 2
 ### By: Ryan Gaudreault, Omar Imran, Marcel LeClair
 
-##Milestone Changes
+## Milestone Changes
 The only change for this milestone was the generate_input method added in main.py. 
 This was added to randomize the input data using the exponential distribution found 
 by input modelling. 
