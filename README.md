@@ -1,7 +1,12 @@
 # Manufacturing Facility Simulation
-## Milestone 1
+## Milestone 2
 ### By: Ryan Gaudreault, Omar Imran, Marcel LeClair
 
+##Milestone Changes
+The only change for this milestone was the generate_input method added in main.py. 
+This was added to randomize the input data using the exponential distribution found 
+by input modelling. 
+## Summary 
 The Manufacturing Facility Simulation was conducted in Python.
 There are two Python files associated with the simulation. The 
 classes.py contains all the classes needed to run the simulation 
