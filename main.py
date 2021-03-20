@@ -5,9 +5,10 @@ import simpy
 from classes import Product, Component, Workstation, Inspector
 
 SIZE = 300
-RUNS = 1000
+RUNS = 1
 MAX_MINUTES = 2500
 default = False
+debug = True
 
 
 def dat_parser(filename: str) -> list:
@@ -52,6 +53,14 @@ if __name__ == "__main__":
             ws1_time = dat_parser("data_files/ws1.dat")
             ws2_time = dat_parser("data_files/ws2.dat")
             ws3_time = dat_parser("data_files/ws3.dat")
+        elif debug:
+            insp1_time = [5] * 5  # make every time 5 minutes to see if clock is working
+            insp22_time = [5] * 5
+            insp23_time = [5] * 5
+            ws1_time = [5] * 5
+            ws2_time = [5] * 5
+            ws3_time = [5] * 5
+            MAX_MINUTES = 20
         else:
             MEANS = {"insp1_time": 10.35791, "insp22_time": 15.53690333, "insp23_time": 20.63275667,
                      "ws1_time": 4.604416667, "ws2_time": 11.09260667, "ws3_time": 8.79558}
@@ -72,17 +81,17 @@ if __name__ == "__main__":
         product2 = Product("Product 2", [component1, component2])
         product3 = Product("Product 3", [component1, component3])
 
-        workstation1 = Workstation(env, "Workstation 1", product1, ws1_time)
-        workstation2 = Workstation(env, "Workstation 2", product2, ws2_time)
-        workstation3 = Workstation(env, "Workstation 3", product3, ws3_time)
+        workstation1 = Workstation(env, "Workstation 1", product1, ws1_time, debug)
+        workstation2 = Workstation(env, "Workstation 2", product2, ws2_time, debug)
+        workstation3 = Workstation(env, "Workstation 3", product3, ws3_time, debug)
 
         inspector1 = Inspector(env, "Inspector 1", [component1], [insp1_time],
-                               [workstation1, workstation2, workstation3])
+                               [workstation1, workstation2, workstation3], debug)
         inspector2 = Inspector(env, "Inspector 2", [component2, component3], [insp22_time, insp23_time],
-                               [workstation2, workstation3])
+                               [workstation2, workstation3], debug)
 
         env.run(until=MAX_MINUTES)
-        print("Finished Run", i+1)
+        print("Finished Run", i + 1)
 
         insp1_wait.append(inspector1.blocked_time)
         insp2_wait.append(inspector2.blocked_time)
@@ -97,16 +106,16 @@ if __name__ == "__main__":
 
     print("")
 
-    avg_insp1_wait = sum(insp1_wait)/len(insp1_wait)
+    avg_insp1_wait = sum(insp1_wait) / len(insp1_wait)
     avg_insp2_wait = sum(insp2_wait) / len(insp2_wait)
 
-    avg_ws1_wait = sum(ws1_wait)/len(ws1_wait)
-    avg_ws2_wait = sum(ws2_wait)/len(ws2_wait)
+    avg_ws1_wait = sum(ws1_wait) / len(ws1_wait)
+    avg_ws2_wait = sum(ws2_wait) / len(ws2_wait)
     avg_ws3_wait = sum(ws3_wait) / len(ws3_wait)
 
-    avg_ws1_prods = sum(ws1_products)/len(ws1_products)
-    avg_ws2_prods = sum(ws2_products)/len(ws2_products)
-    avg_ws3_prods = sum(ws3_products)/len(ws3_products)
+    avg_ws1_prods = sum(ws1_products) / len(ws1_products)
+    avg_ws2_prods = sum(ws2_products) / len(ws2_products)
+    avg_ws3_prods = sum(ws3_products) / len(ws3_products)
 
     print(inspector1.name, " wait time: ", avg_insp1_wait)
     print(inspector2.name, " wait time: ", avg_insp2_wait)

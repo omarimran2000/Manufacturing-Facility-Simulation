@@ -26,13 +26,14 @@ class Product:
 
 class Workstation:
 
-    def __init__(self, env: simpy.Environment, name: str, product: Product, processing_times: list):
+    def __init__(self, env: simpy.Environment, name: str, product: Product, processing_times: list, debug: bool):
         """
         Constructor for workstation
         :param env: the environment the workstation will be
         :param name:  of the workstation
         :param product:  the product that the workstation is building
         :param processing_times: the processing times generated in the .dat file
+        :param debug: if debug mode should be on
         """
         self.name = name
         self.product = product
@@ -44,6 +45,7 @@ class Workstation:
         self.products_made = 0
         env.process(self.workstation_process())
         self.wait_time = 0
+        self.debug = debug;
 
     def workstation_process(self):
         """
@@ -57,9 +59,17 @@ class Workstation:
 
             self.wait_time += (self.env.now - before_time)
 
+            if self.debug:
+                print(self.name, " creating ", self.product.name, " at ", round(self.env.now, 3),
+                      " minutes")
+
             # generate random processing time from input list
             process_time = self.processing_times.pop(random.randint(0, len(self.processing_times) - 1))
             yield self.env.timeout(process_time)
+
+            if self.debug:
+                print(self.name, " created ", self.product.name, " at ", round(self.env.now, 3),
+                      " minutes")
 
             self.products_made += 1
 
@@ -67,7 +77,7 @@ class Workstation:
 class Inspector:
 
     def __init__(self, env: simpy.Environment, name: str, components: list, processing_times: list,
-                 workstations: list):
+                 workstations: list, debug:bool):
         """
         Constructor for an inspector
         :param env: the environment the inspector will be
@@ -75,6 +85,7 @@ class Inspector:
         :param components: the components the inspector will build
         :param processing_times: the processing times generated in the .dat file
         :param workstations: the workstations that the inspector can send components to
+        :param debug: if debug mode should be on
         """
         self.name = name
         self.components = components
@@ -89,6 +100,7 @@ class Inspector:
         self.workstations = workstations
         self.env.process(self.inspector_process())
         self.blocked_time = 0
+        self.debug = debug;
 
     def send_component(self, component: Component) -> Workstation:
         """
@@ -129,4 +141,7 @@ class Inspector:
             destination = self.send_component(component)
             yield destination.buffers[component].put(1)
 
+            if self.debug:
+                print(self.name, " sent ", component.name, " to ", destination.name, " at ", round(self.env.now, 3),
+                      " minutes")
             self.blocked_time += (self.env.now - before_time)
