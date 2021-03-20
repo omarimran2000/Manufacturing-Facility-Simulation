@@ -1,4 +1,5 @@
 import random
+
 import simpy
 
 
@@ -45,7 +46,7 @@ class Workstation:
         self.products_made = 0
         env.process(self.workstation_process())
         self.wait_time = 0
-        self.debug = debug;
+        self.debug = debug
 
     def workstation_process(self):
         """
@@ -77,7 +78,7 @@ class Workstation:
 class Inspector:
 
     def __init__(self, env: simpy.Environment, name: str, components: list, processing_times: list,
-                 workstations: list, debug:bool):
+                 workstations: list, debug: bool):
         """
         Constructor for an inspector
         :param env: the environment the inspector will be
@@ -100,7 +101,7 @@ class Inspector:
         self.workstations = workstations
         self.env.process(self.inspector_process())
         self.blocked_time = 0
-        self.debug = debug;
+        self.debug = debug
 
     def send_component(self, component: Component) -> Workstation:
         """

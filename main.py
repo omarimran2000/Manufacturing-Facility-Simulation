@@ -2,6 +2,7 @@
 
 import numpy as np
 import simpy
+
 from classes import Product, Component, Workstation, Inspector
 
 SIZE = 300
