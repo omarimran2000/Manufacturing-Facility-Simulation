@@ -5,10 +5,10 @@ import simpy
 from classes import Product, Component, Workstation, Inspector
 
 SIZE = 300
-RUNS = 1
+RUNS = 1000
 MAX_MINUTES = 2500
 default = False
-debug = True
+debug = False
 
 
 def dat_parser(filename: str) -> list:
