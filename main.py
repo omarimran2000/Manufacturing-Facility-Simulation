@@ -61,7 +61,7 @@ if __name__ == "__main__":
             ws1_time = [5] * SIZE
             ws2_time = [5] * SIZE
             ws3_time = [5] * SIZE
-            MAX_MINUTES = 2500
+            MAX_MINUTES = 250
         else:
             MEANS = {"insp1_time": 10.35791, "insp22_time": 15.53690333, "insp23_time": 20.63275667,
                      "ws1_time": 4.604416667, "ws2_time": 11.09260667, "ws3_time": 8.79558}
