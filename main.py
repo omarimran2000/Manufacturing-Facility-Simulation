@@ -55,13 +55,13 @@ if __name__ == "__main__":
             ws2_time = dat_parser("data_files/ws2.dat")
             ws3_time = dat_parser("data_files/ws3.dat")
         elif debug:
-            insp1_time = [5] * 5  # make every time 5 minutes to see if clock is working
-            insp22_time = [5] * 5
-            insp23_time = [5] * 5
-            ws1_time = [5] * 5
-            ws2_time = [5] * 5
-            ws3_time = [5] * 5
-            MAX_MINUTES = 20
+            insp1_time = [5] * SIZE  # make every time 5 minutes to see if clock is working
+            insp22_time = [5] * SIZE
+            insp23_time = [5] * SIZE
+            ws1_time = [5] * SIZE
+            ws2_time = [5] * SIZE
+            ws3_time = [5] * SIZE
+            MAX_MINUTES = 2500
         else:
             MEANS = {"insp1_time": 10.35791, "insp22_time": 15.53690333, "insp23_time": 20.63275667,
                      "ws1_time": 4.604416667, "ws2_time": 11.09260667, "ws3_time": 8.79558}
