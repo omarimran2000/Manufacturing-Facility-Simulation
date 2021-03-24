@@ -59,6 +59,8 @@ class Workstation:
                 yield self.buffers[i].get(1)  # try to get one component from each of the buffers
 
             self.wait_time += (self.env.now - before_time)
+            if self.debug:
+                print(self.name, " waited for: ", self.env.now - before_time, " minutes")
 
             if self.debug:
                 print(self.name, " creating ", self.product.name, " at ", round(self.env.now, 3),
@@ -146,3 +148,5 @@ class Inspector:
                 print(self.name, " sent ", component.name, " to ", destination.name, " at ", round(self.env.now, 3),
                       " minutes")
             self.blocked_time += (self.env.now - before_time)
+            if self.debug:
+                print(self.name, " waited for: ", self.env.now - before_time," minutes")
