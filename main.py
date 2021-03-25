@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from classes import Product, Component, Workstation, Inspector
 
 SIZE = 500
-RUNS = 1000
+RUNS = 100
 MAX_MINUTES = 2500
 DELETION_POINT = 0
 default = False
