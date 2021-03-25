@@ -27,7 +27,8 @@ class Product:
 
 class Workstation:
 
-    def __init__(self, env: simpy.Environment, name: str, product: Product, processing_times: list, debug: bool):
+    def __init__(self, env: simpy.Environment, name: str, product: Product, processing_times: list, debug: bool,
+                 deletion_point: int):
         """
         Constructor for workstation
         :param env: the environment the workstation will be
@@ -35,6 +36,7 @@ class Workstation:
         :param product:  the product that the workstation is building
         :param processing_times: the processing times generated in the .dat file
         :param debug: if debug mode should be on
+        :param deletion_point: the deletion point of the model
         """
         self.name = name
         self.product = product
@@ -47,6 +49,7 @@ class Workstation:
         env.process(self.workstation_process())
         self.wait_time = 0
         self.debug = debug
+        self.deletion_point = deletion_point
 
     def workstation_process(self):
         """
@@ -58,11 +61,11 @@ class Workstation:
             for i in self.buffers.keys():  # wait until all components are available
                 yield self.buffers[i].get(1)  # try to get one component from each of the buffers
 
-            self.wait_time += (self.env.now - before_time)
-            if self.debug:
-                print(self.name, " waited for: ", self.env.now - before_time, " minutes")
+            if self.env.now >= self.deletion_point:
+                self.wait_time += (self.env.now - before_time)
 
             if self.debug:
+                print(self.name, " waited for: ", self.env.now - before_time, " minutes")
                 print(self.name, " creating ", self.product.name, " at ", round(self.env.now, 3),
                       " minutes")
 
@@ -74,13 +77,14 @@ class Workstation:
                 print(self.name, " created ", self.product.name, " at ", round(self.env.now, 3),
                       " minutes")
 
-            self.products_made += 1
+            if self.env.now >= self.deletion_point:
+                self.products_made += 1
 
 
 class Inspector:
 
     def __init__(self, env: simpy.Environment, name: str, components: list, processing_times: list,
-                 workstations: list, debug: bool):
+                 workstations: list, debug: bool, deletion_point: int):
         """
         Constructor for an inspector
         :param env: the environment the inspector will be
@@ -89,6 +93,7 @@ class Inspector:
         :param processing_times: the processing times generated in the .dat file
         :param workstations: the workstations that the inspector can send components to
         :param debug: if debug mode should be on
+        :param deletion_point: the deletion point of the model
         """
         self.name = name
         self.components = components
@@ -104,6 +109,7 @@ class Inspector:
         self.env.process(self.inspector_process())
         self.blocked_time = 0
         self.debug = debug
+        self.deletion_point = deletion_point
 
     def send_component(self, component: Component) -> Workstation:
         """
@@ -147,6 +153,9 @@ class Inspector:
             if self.debug:
                 print(self.name, " sent ", component.name, " to ", destination.name, " at ", round(self.env.now, 3),
                       " minutes")
-            self.blocked_time += (self.env.now - before_time)
+
+            if self.env.now >= self.deletion_point:
+                self.blocked_time += (self.env.now - before_time)
+
             if self.debug:
-                print(self.name, " waited for: ", self.env.now - before_time," minutes")
+                print(self.name, " waited for: ", self.env.now - before_time, " minutes")

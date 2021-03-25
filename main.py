@@ -8,6 +8,7 @@ from classes import Product, Component, Workstation, Inspector
 SIZE = 300
 RUNS = 1000
 MAX_MINUTES = 2500
+DELETION_POINT = 500
 default = False
 debug = False
 
@@ -82,14 +83,14 @@ if __name__ == "__main__":
         product2 = Product("Product 2", [component1, component2])
         product3 = Product("Product 3", [component1, component3])
 
-        workstation1 = Workstation(env, "Workstation 1", product1, ws1_time, debug)
-        workstation2 = Workstation(env, "Workstation 2", product2, ws2_time, debug)
-        workstation3 = Workstation(env, "Workstation 3", product3, ws3_time, debug)
+        workstation1 = Workstation(env, "Workstation 1", product1, ws1_time, debug, DELETION_POINT)
+        workstation2 = Workstation(env, "Workstation 2", product2, ws2_time, debug, DELETION_POINT)
+        workstation3 = Workstation(env, "Workstation 3", product3, ws3_time, debug, DELETION_POINT)
 
         inspector1 = Inspector(env, "Inspector 1", [component1], [insp1_time],
-                               [workstation1, workstation2, workstation3], debug)
+                               [workstation1, workstation2, workstation3], debug, DELETION_POINT)
         inspector2 = Inspector(env, "Inspector 2", [component2, component3], [insp22_time, insp23_time],
-                               [workstation2, workstation3], debug)
+                               [workstation2, workstation3], debug, DELETION_POINT)
 
         env.run(until=MAX_MINUTES)
         print("Finished Run", i + 1)
@@ -106,7 +107,7 @@ if __name__ == "__main__":
         ws3_products.append(workstation3.products_made)
 
     print("")
-
+    MAX_MINUTES = MAX_MINUTES - DELETION_POINT
     avg_insp1_wait = sum(insp1_wait) / len(insp1_wait)
     avg_insp2_wait = sum(insp2_wait) / len(insp2_wait)
 
