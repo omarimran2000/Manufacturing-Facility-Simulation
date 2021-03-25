@@ -1,5 +1,4 @@
 import random
-
 import simpy
 
 
@@ -50,6 +49,7 @@ class Workstation:
         self.wait_time = 0
         self.debug = debug
         self.deletion_point = deletion_point
+        self.products_time = [0]*2500
 
     def workstation_process(self):
         """
@@ -79,6 +79,7 @@ class Workstation:
 
             if self.env.now >= self.deletion_point:
                 self.products_made += 1
+            self.products_time[int(self.env.now)] += 1
 
 
 class Inspector:

@@ -2,15 +2,16 @@
 
 import numpy as np
 import simpy
-
+import matplotlib.pyplot as plt
 from classes import Product, Component, Workstation, Inspector
 
-SIZE = 300
+SIZE = 500
 RUNS = 1000
 MAX_MINUTES = 2500
 DELETION_POINT = 0
 default = False
 debug = False
+plot = False
 
 
 def dat_parser(filename: str) -> list:
@@ -144,3 +145,23 @@ if __name__ == "__main__":
     print("Workstation 1 Mean service time: ", (MAX_MINUTES - avg_ws1_wait) / avg_ws1_prods)
     print("Workstation 2 Mean service time: ", (MAX_MINUTES - avg_ws2_wait) / avg_ws2_prods)
     print("Workstation 3 Mean service time: ", (MAX_MINUTES - avg_ws3_wait) / avg_ws3_prods)
+
+    if plot:
+        plt.plot(workstation1.products_time)
+        plt.title("Products made by Workstation 1 by Minute")
+        plt.xlabel("Minutes")
+        plt.xticks(np.arange(0,MAX_MINUTES+1, 250))
+        plt.ylabel("Products Made")
+        plt.show()
+        plt.plot(workstation2.products_time)
+        plt.title("Products made by Workstation 2 by Minute")
+        plt.xlabel("Minutes")
+        plt.xticks(np.arange(0, MAX_MINUTES + 1, 250))
+        plt.ylabel("Products Made")
+        plt.show()
+        plt.plot(workstation3.products_time)
+        plt.title("Products made by Workstation 3 by Minute")
+        plt.xlabel("Minutes")
+        plt.xticks(np.arange(0, MAX_MINUTES + 1, 250))
+        plt.ylabel("Products Made")
+        plt.show()
