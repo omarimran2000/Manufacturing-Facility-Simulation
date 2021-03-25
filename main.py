@@ -8,7 +8,7 @@ from classes import Product, Component, Workstation, Inspector
 SIZE = 500
 RUNS = 100
 MAX_MINUTES = 2500
-DELETION_POINT = 0
+DELETION_POINT = 400
 default = False
 debug = False
 plot = False
