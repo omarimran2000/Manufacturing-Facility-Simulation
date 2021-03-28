@@ -5,10 +5,10 @@ import simpy
 import matplotlib.pyplot as plt
 from classes import Product, Component, Workstation, Inspector
 
-SIZE = 500
+SIZE = 1000
 RUNS = 100
-MAX_MINUTES = 2500
-DELETION_POINT = 400
+MAX_MINUTES = 3300
+DELETION_POINT = 300
 default = False
 debug = False
 plot = False
