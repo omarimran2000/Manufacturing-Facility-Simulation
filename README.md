@@ -1,11 +1,9 @@
 # Manufacturing Facility Simulation
-## Milestone 2
+## Milestone 3
 ### By: Ryan Gaudreault, Omar Imran, Marcel LeClair
 
 ## Milestone Changes
-The only change for this milestone was the generate_input method added in main.py. 
-This was added to randomize the input data using the exponential distribution found 
-by input modelling. 
+
 ## Summary 
 The Manufacturing Facility Simulation was conducted in Python.
 There are two Python files associated with the simulation. The 
@@ -17,7 +15,7 @@ on Python 3.7 or above.
 Python needs to be downloaded in order for the simulation to run. 
 When downloading Python, it will ask to install "pip"  as well which 
 should be installed, so the external libraries can be downloaded.
-The simulation relies on the libraries NumPy and SimPy in order to run. 
+The simulation relies on the libraries NumPy, SciPy, MatPlotLib SimPy in order to run. 
 To install these libraries, you need to have "pip" downloaded when downloading 
 Python. </br>
 
@@ -26,10 +24,13 @@ Installation on Ubuntu (Debian)
 $ apt-get install pip
 $ pip install simpy
 $ pip install numpy
+$ pip install matplotlib 
+$ pip install scipy
 ```
 
 Once pip is installed, in your terminal/command prompt, you need to 
-type *pip install simpy* and *pip install numpy* to install these libraries as shown above. 
+type *pip install simpy* , *pip install scipy*, *pip install matplotlib* 
+*pip install numpy* to install these libraries as shown above. 
 
 ## Running The Simulation 
  The simulation can be run by using a Python IDE (i.e. PyCharm) or by typing
@@ -47,3 +48,5 @@ $ python main.py
 How to Install Python: https://realpython.com/installing-python/ </br>
 How to Install NumPy: https://numpy.org/install/ </br>
 How to Install SimPy: https://simpy.readthedocs.io/en/latest/simpy_intro/installation.html
+How to Install SciPy: https://www.scipy.org/install.html
+How to Install MatPlotLib: https://matplotlib.org/stable/users/installing.html
