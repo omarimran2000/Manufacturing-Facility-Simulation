@@ -3,6 +3,7 @@
 import numpy as np
 import simpy
 import matplotlib.pyplot as plt
+import scipy.stats
 from classes import Product, Component, Workstation, Inspector
 
 SIZE = 1000
@@ -12,6 +13,13 @@ DELETION_POINT = 300
 default = False
 debug = False
 plot = False
+
+def generate_confidence(data, confidence=0.95):
+    a = 1.0 * np.array(data)
+    n = len(a)
+    m, se = np.mean(a), scipy.stats.sem(a)
+    h = se * scipy.stats.t.ppf((1 + confidence) / 2., n - 1)
+    return m, m - h, m + h
 
 
 def dat_parser(filename: str) -> list:
@@ -120,19 +128,36 @@ if __name__ == "__main__":
     avg_ws2_prods = sum(ws2_products) / len(ws2_products)
     avg_ws3_prods = sum(ws3_products) / len(ws3_products)
 
+    insp1_wait_conf = generate_confidence(insp1_wait, 0.95)
+    insp2_wait_conf = generate_confidence(insp2_wait, 0.95)
+    ws1_wait_conf = generate_confidence(ws1_wait, 0.95)
+    ws2_wait_conf = generate_confidence(ws2_wait, 0.95)
+    ws3_wait_conf = generate_confidence(ws3_wait, 0.95)
+    ws1_prods_conf = generate_confidence(ws1_products, 0.95)
+    ws2_prods_conf = generate_confidence(ws2_products, 0.95)
+    ws3_prods_conf = generate_confidence(ws3_products, 0.95)
+
     print(inspector1.name, " wait time: ", avg_insp1_wait)
+    print(inspector1.name, " wait time confidence intervals: ", insp1_wait_conf[1:3])
     print(inspector2.name, " wait time: ", avg_insp2_wait)
+    print(inspector2.name, " wait time confidence intervals: ", insp2_wait_conf[1:3])
     print("")
     print(inspector1.name, " wait time percent: ", avg_insp1_wait / MAX_MINUTES)
     print(inspector2.name, " wait time percent: ", avg_insp2_wait / MAX_MINUTES)
     print("")
     print(workstation1.name, " wait time: ", avg_ws1_wait)
+    print(workstation1.name, " wait time confidence intervals: ", ws1_wait_conf[1:3])
     print(workstation2.name, " wait time: ", avg_ws2_wait)
+    print(workstation2.name, " wait time confidence intervals: ", ws2_wait_conf[1:3])
     print(workstation3.name, " wait time: ", avg_ws3_wait)
+    print(workstation3.name, " wait time confidence intervals: ", ws3_wait_conf[1:3])
     print("")
     print("Workstation 1 Products Made: ", avg_ws1_prods)
+    print("Workstation 1 Products Made Confidence interval: ", ws1_prods_conf[1:3])
     print("Workstation 2 Products Made: ", avg_ws2_prods)
+    print("Workstation 2 Products Made Confidence interval: ", ws2_prods_conf[1:3])
     print("Workstation 3 Products Made: ", avg_ws3_prods)
+    print("Workstation 3 Products Made Confidence interval: ", ws3_prods_conf[1:3])
     print("")
     print("Workstation 1 Throughput: ", avg_ws1_prods / MAX_MINUTES)
     print("Workstation 2 Throughput: ", avg_ws2_prods / MAX_MINUTES)
