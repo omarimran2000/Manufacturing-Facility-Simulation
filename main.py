@@ -22,7 +22,7 @@ def generate_confidence(data):
     :return: the confidence interval
     """
     confidence = 0.95
-    a = 1.0 * np.array(data)
+    a = np.array(data)
     v = len(a) - 1
     mean, error = np.mean(a), stats.sem(a)
     h = error * stats.t.ppf((1 + confidence) / 2., v)
