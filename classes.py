@@ -1,6 +1,9 @@
 import random
+
 import simpy
+
 SIZE = 3300
+
 
 class Component:
 
@@ -49,7 +52,7 @@ class Workstation:
         self.wait_time = 0
         self.debug = debug
         self.deletion_point = deletion_point
-        self.products_time = [0]*SIZE
+        self.products_time = [0] * SIZE
 
     def workstation_process(self):
         """

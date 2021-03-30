@@ -1,13 +1,14 @@
 # Main script
 
+import matplotlib.pyplot as plt
 import numpy as np
 import simpy
-import matplotlib.pyplot as plt
 from scipy import stats
+
 from classes import Product, Component, Workstation, Inspector
 
 SIZE = 1000
-RUNS = 100
+RUNS = 50
 MAX_MINUTES = 3300
 DELETION_POINT = 300
 default = False
