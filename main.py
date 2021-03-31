@@ -24,7 +24,7 @@ def generate_confidence(data):
     """
     confidence = 0.95
     a = np.array(data)
-    v = len(a) - 1
+    v = RUNS - 1
     mean, error = np.mean(a), stats.sem(a)
     h = error * stats.t.ppf((1 + confidence) / 2., v)
     return mean - h, mean + h
