@@ -16,20 +16,6 @@ debug = False
 plot = False
 
 
-def generate_confidence(data):
-    """
-    Used to generate the confidence intervals
-    :param data: the data to be passed in
-    :return: the confidence interval
-    """
-    confidence = 0.95
-    a = np.array(data)
-    v = RUNS - 1
-    mean, error = np.mean(a), stats.sem(a)
-    h = error * stats.t.ppf((1 + confidence) / 2., v)
-    return mean - h, mean + h
-
-
 def dat_parser(filename: str) -> list:
     """
     Converts .dat file to numpy array
@@ -46,6 +32,19 @@ def generate_input(mean: int) -> list:
     :return: a list of numbers
     """
     return list(np.random.exponential(mean, SIZE))
+
+
+def generate_confidence(lst: list):
+    """
+    Used to generate the confidence intervals
+    :param lst: the data to be passed in
+    :return: the confidence interval
+    """
+    confidence = 0.95
+    v = RUNS - 1
+    mean, error = np.mean(lst), stats.sem(lst)
+    h = error * stats.t.ppf((1 + confidence) / 2, v)
+    return mean - h, mean + h
 
 
 # Main Script
