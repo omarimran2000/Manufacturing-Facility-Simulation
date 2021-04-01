@@ -8,27 +8,13 @@ from scipy import stats
 from classes import Product, Component, Workstation, Inspector
 
 SIZE = 1000
-RUNS = 100
+RUNS = 50
 MAX_MINUTES = 3300
 DELETION_POINT = 300
 default = False
 debug = False
 plot = False
 sensitivity = False
-
-
-def generate_confidence(data):
-    """
-    Used to generate the confidence intervals
-    :param data: the data to be passed in
-    :return: the confidence interval
-    """
-    confidence = 0.95
-    a = np.array(data)
-    v = len(a) - 1
-    mean, error = np.mean(a), stats.sem(a)
-    h = error * stats.t.ppf((1 + confidence) / 2., v)
-    return mean - h, mean + h
 
 
 def dat_parser(filename: str) -> list:
@@ -47,6 +33,19 @@ def generate_input(mean: int) -> list:
     :return: a list of numbers
     """
     return list(np.random.exponential(mean, SIZE))
+
+
+def generate_confidence(lst: list):
+    """
+    Used to generate the confidence intervals
+    :param lst: the data to be passed in
+    :return: the confidence interval
+    """
+    confidence = 0.95
+    v = RUNS - 1
+    mean, error = np.mean(lst), stats.sem(lst)
+    h = error * stats.t.ppf((1 + confidence) / 2, v)
+    return mean - h, mean + h
 
 
 # Main Script
