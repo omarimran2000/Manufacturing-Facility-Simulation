@@ -1,9 +1,10 @@
 # Main script
 
+import matplotlib.pyplot as plt
 import numpy as np
 import simpy
-import matplotlib.pyplot as plt
 from scipy import stats
+
 from classes import Product, Component, Workstation, Inspector
 
 SIZE = 10000
@@ -13,7 +14,7 @@ DELETION_POINT = 300
 default = False
 debug = False
 plot = False
-sensitivity = True
+sensitivity = False
 
 
 def generate_confidence(data):
@@ -68,7 +69,7 @@ if __name__ == "__main__":
                  "ws1_time": 4.604416667, "ws2_time": 11.09260667, "ws3_time": 8.79558}
         steps = 101
         deviation = 0.5  # vary each input value by +-50%
-        changes = np.linspace(-deviation*100, deviation*100, steps)
+        changes = np.linspace(-deviation * 100, deviation * 100, steps)
         MEAS_TIME = MAX_MINUTES - DELETION_POINT  # time after deletion point over which data is measured
         for m in MEANS:
             newMEANS = dict(MEANS)
@@ -81,7 +82,7 @@ if __name__ == "__main__":
             ws2_util = []
             ws3_util = []
             for n in range(steps):
-                newMEANS[m] = MEANS[m] * ((n/(steps-1)) + deviation)
+                newMEANS[m] = MEANS[m] * ((n / (steps - 1)) + deviation)
                 insp1_time = generate_input(newMEANS["insp1_time"])
                 insp22_time = generate_input(newMEANS["insp22_time"])
                 insp23_time = generate_input(newMEANS["insp23_time"])
@@ -113,7 +114,7 @@ if __name__ == "__main__":
                 insp1_wait_rate.append(inspector1.blocked_time / MEAS_TIME)
                 insp2_wait_rate.append(inspector2.blocked_time / MEAS_TIME)
 
-                ws1_util.append((MEAS_TIME - workstation1.wait_time)/MEAS_TIME)
+                ws1_util.append((MEAS_TIME - workstation1.wait_time) / MEAS_TIME)
                 ws2_util.append((MEAS_TIME - workstation2.wait_time) / MEAS_TIME)
                 ws3_util.append((MEAS_TIME - workstation3.wait_time) / MEAS_TIME)
 
@@ -159,14 +160,14 @@ if __name__ == "__main__":
                 ws1_time = dat_parser("data_files/ws1.dat")
                 ws2_time = dat_parser("data_files/ws2.dat")
                 ws3_time = dat_parser("data_files/ws3.dat")
-    #        elif debug:
-    #            insp1_time = [5] * SIZE  # make every time 5 minutes to see if clock is working
-    #            insp22_time = [5] * SIZE
-    #            insp23_time = [5] * SIZE
-    #            ws1_time = [5] * SIZE
-    #            ws2_time = [5] * SIZE
-    #            ws3_time = [5] * SIZE
-    #            MAX_MINUTES = 250
+            #        elif debug:
+            #            insp1_time = [5] * SIZE  # make every time 5 minutes to see if clock is working
+            #            insp22_time = [5] * SIZE
+            #            insp23_time = [5] * SIZE
+            #            ws1_time = [5] * SIZE
+            #            ws2_time = [5] * SIZE
+            #            ws3_time = [5] * SIZE
+            #            MAX_MINUTES = 250
             else:
                 MEANS = {"insp1_time": 10.35791, "insp22_time": 15.53690333, "insp23_time": 20.63275667,
                          "ws1_time": 4.604416667, "ws2_time": 11.09260667, "ws3_time": 8.79558}
@@ -272,12 +273,12 @@ if __name__ == "__main__":
                     components_used[c] += w.components_used[c]
                 for c in w.components_held:
                     components_held[c] += w.components_held[c]
-            component1_conserved = components_inspected[component1.name] == components_buffered[component1.name]\
-                                    + components_used[component1.name]
+            component1_conserved = components_inspected[component1.name] == components_buffered[component1.name] \
+                                   + components_used[component1.name]
             component2_conserved = components_inspected[component2.name] == components_buffered[component2.name] \
-                                    + components_used[component2.name]
+                                   + components_used[component2.name]
             component3_conserved = components_inspected[component3.name] == components_buffered[component3.name] \
-                                    + components_used[component3.name]
+                                   + components_used[component3.name]
             print("DEBUG: ", component1.name, " conserved: ", component1_conserved)
             print("DEBUG: ", component2.name, " conserved: ", component2_conserved)
             print("DEBUG: ", component3.name, " conserved: ", component3_conserved)
