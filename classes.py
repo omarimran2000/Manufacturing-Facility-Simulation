@@ -1,7 +1,5 @@
 import random
-
 import simpy
-
 SIZE = 3300
 
 
@@ -52,7 +50,9 @@ class Workstation:
         self.wait_time = 0
         self.debug = debug
         self.deletion_point = deletion_point
-        self.products_time = [0] * SIZE
+        self.products_time = [0]*SIZE
+        self.components_held = {}
+        self.components_used = {}
 
     def workstation_process(self):
         """
@@ -63,6 +63,12 @@ class Workstation:
             before_time = self.env.now
             for i in self.buffers.keys():  # wait until all components are available
                 yield self.buffers[i].get(1)  # try to get one component from each of the buffers
+                if self.debug and i.name in self.components_used:
+                    self.components_used[i.name] += 1
+                    self.components_held[i.name] += 1
+                elif self.debug:
+                    self.components_used[i.name] = 1
+                    self.components_held[i.name] = 1
 
             if self.env.now >= self.deletion_point:
                 self.wait_time += (self.env.now - before_time)
@@ -82,6 +88,10 @@ class Workstation:
 
             if self.env.now >= self.deletion_point:
                 self.products_made += 1
+                if self.debug:
+                    for i in self.buffers.keys():
+                        self.components_held[i.name] -= 1
+
             self.products_time[int(self.env.now)] += 1
 
 
@@ -114,6 +124,8 @@ class Inspector:
         self.blocked_time = 0
         self.debug = debug
         self.deletion_point = deletion_point
+        if debug:
+            self.components_inspected = {}
 
     def send_component(self, component: Component) -> Workstation:
         """
@@ -157,6 +169,10 @@ class Inspector:
             if self.debug:
                 print(self.name, " sent ", component.name, " to ", destination.name, " at ", round(self.env.now, 3),
                       " minutes")
+                if component.name in self.components_inspected:
+                    self.components_inspected[component.name] += 1
+                else:
+                    self.components_inspected[component.name] = 1
 
             if self.env.now >= self.deletion_point:
                 self.blocked_time += (self.env.now - before_time)

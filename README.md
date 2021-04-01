@@ -3,10 +3,7 @@
 ### By: Ryan Gaudreault, Omar Imran, Marcel LeClair
 
 ## Milestone Changes
-For this milestone, the ability to replicate the model and generate confidence intervals was implemented. 
-The ability to plot the products made by each workstation with respect to time was added to find the deletion point.
-A deletion point was added, so the initialization bias can be reduced.
-MatPlotLib and SciPy also need to be installed to run the simulation with instructions below.
+
 ## Summary 
 The Manufacturing Facility Simulation was conducted in Python.
 There are two Python files associated with the simulation. The 
@@ -50,6 +47,6 @@ $ python main.py
 
 How to Install Python: https://realpython.com/installing-python/ </br>
 How to Install NumPy: https://numpy.org/install/ </br>
-How to Install SimPy: https://simpy.readthedocs.io/en/latest/simpy_intro/installation.html </br>
-How to Install SciPy: https://www.scipy.org/install.html </br>
+How to Install SimPy: https://simpy.readthedocs.io/en/latest/simpy_intro/installation.html
+How to Install SciPy: https://www.scipy.org/install.html
 How to Install MatPlotLib: https://matplotlib.org/stable/users/installing.html
