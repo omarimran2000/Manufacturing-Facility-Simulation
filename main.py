@@ -7,7 +7,7 @@ from scipy import stats
 
 from classes import Product, Component, Workstation, Inspector
 
-SIZE = 10000
+SIZE = 1000
 RUNS = 100
 MAX_MINUTES = 3300
 DELETION_POINT = 300
