@@ -100,7 +100,7 @@ class Workstation:
 class Inspector:
 
     def __init__(self, env: simpy.Environment, name: str, components: list, processing_times: list,
-                 workstations: list, debug: bool, deletion_point: int):
+                 workstations: list, debug: bool, deletion_point: int, alternate: bool):
         """
         Constructor for an inspector
         :param env: the environment the inspector will be
@@ -110,6 +110,7 @@ class Inspector:
         :param workstations: the workstations that the inspector can send components to
         :param debug: if debug mode should be on
         :param deletion_point: the deletion point of the model
+        :param alternate: if it is the alternate design
         """
         self.name = name
         self.components = components
@@ -128,6 +129,7 @@ class Inspector:
         self.deletion_point = deletion_point
         if debug:
             self.components_inspected = {}
+        self.alternate = alternate
 
     def send_component(self, component: Component) -> Workstation:
         """
@@ -138,12 +140,21 @@ class Inspector:
         """
         min_buffer = 2
 
-        for workstation in self.workstations:  # find buffer with minimal components
-            if component in workstation.buffers.keys() and workstation.buffers[component].level < min_buffer:
-                min_buffer = workstation.buffers[component].level
-        for workstation in self.workstations:  # find first workstation with minimal buffer
-            if component in workstation.buffers.keys() and workstation.buffers[component].level == min_buffer:
-                return workstation
+        if not self.alternate:
+            for workstation in self.workstations:  # find buffer with minimal components
+                if component in workstation.buffers.keys() and workstation.buffers[component].level < min_buffer:
+                    min_buffer = workstation.buffers[component].level
+            for workstation in self.workstations:  # find first workstation with minimal buffer
+                if component in workstation.buffers.keys() and workstation.buffers[component].level == min_buffer:
+                    return workstation
+        else:
+            for workstation in self.workstations:  # find buffer with minimal components
+                if component in workstation.buffers.keys() and workstation.buffers[component].level < min_buffer:
+                    min_buffer = workstation.buffers[component].level
+            for workstation in self.workstations:  # find first workstation with minimal buffer
+                if component in workstation.buffers.keys() and workstation.buffers[component].level == min_buffer:
+                    temp_w = workstation
+            return temp_w
 
     def choose_random_component(self) -> Component:
         """

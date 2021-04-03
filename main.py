@@ -15,6 +15,7 @@ default = False
 debug = False
 plot = False
 sensitivity = False
+alternate = True
 
 
 def dat_parser(filename: str) -> list:
@@ -104,9 +105,9 @@ if __name__ == "__main__":
                 workstation3 = Workstation(env, "Workstation 3", product3, ws3_time, debug, DELETION_POINT)
 
                 inspector1 = Inspector(env, "Inspector 1", [component1], [insp1_time],
-                                       [workstation1, workstation2, workstation3], debug, DELETION_POINT)
+                                       [workstation1, workstation2, workstation3], debug, DELETION_POINT,alternate)
                 inspector2 = Inspector(env, "Inspector 2", [component2, component3], [insp22_time, insp23_time],
-                                       [workstation2, workstation3], debug, DELETION_POINT)
+                                       [workstation2, workstation3], debug, DELETION_POINT,alternate)
 
                 env.run(until=MAX_MINUTES)
 
@@ -192,9 +193,9 @@ if __name__ == "__main__":
             workstation3 = Workstation(env, "Workstation 3", product3, ws3_time, debug, DELETION_POINT)
 
             inspector1 = Inspector(env, "Inspector 1", [component1], [insp1_time],
-                                   [workstation1, workstation2, workstation3], debug, DELETION_POINT)
+                                   [workstation1, workstation2, workstation3], debug, DELETION_POINT,alternate)
             inspector2 = Inspector(env, "Inspector 2", [component2, component3], [insp22_time, insp23_time],
-                                   [workstation2, workstation3], debug, DELETION_POINT)
+                                   [workstation2, workstation3], debug, DELETION_POINT,alternate)
 
             env.run(until=MAX_MINUTES)
             print("Finished Run", i + 1)
