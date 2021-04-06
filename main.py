@@ -1,9 +1,10 @@
 # Main script
 
+from statistics import stdev
+
 import matplotlib.pyplot as plt
 import numpy as np
 import simpy
-from statistics import stdev
 from scipy import stats
 
 from classes import Product, Component, Workstation, Inspector
