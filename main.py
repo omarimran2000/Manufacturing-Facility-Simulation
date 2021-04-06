@@ -3,6 +3,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import simpy
+from statistics import stdev
 from scipy import stats
 
 from classes import Product, Component, Workstation, Inspector
@@ -15,7 +16,7 @@ default = False
 debug = False
 plot = False
 sensitivity = False
-alternate = True
+alternate = False
 
 
 def dat_parser(filename: str) -> list:
@@ -105,9 +106,9 @@ if __name__ == "__main__":
                 workstation3 = Workstation(env, "Workstation 3", product3, ws3_time, debug, DELETION_POINT)
 
                 inspector1 = Inspector(env, "Inspector 1", [component1], [insp1_time],
-                                       [workstation1, workstation2, workstation3], debug, DELETION_POINT,alternate)
+                                       [workstation1, workstation2, workstation3], debug, DELETION_POINT, alternate)
                 inspector2 = Inspector(env, "Inspector 2", [component2, component3], [insp22_time, insp23_time],
-                                       [workstation2, workstation3], debug, DELETION_POINT,alternate)
+                                       [workstation2, workstation3], debug, DELETION_POINT, alternate)
 
                 env.run(until=MAX_MINUTES)
 
@@ -193,9 +194,9 @@ if __name__ == "__main__":
             workstation3 = Workstation(env, "Workstation 3", product3, ws3_time, debug, DELETION_POINT)
 
             inspector1 = Inspector(env, "Inspector 1", [component1], [insp1_time],
-                                   [workstation1, workstation2, workstation3], debug, DELETION_POINT,alternate)
+                                   [workstation1, workstation2, workstation3], debug, DELETION_POINT, alternate)
             inspector2 = Inspector(env, "Inspector 2", [component2, component3], [insp22_time, insp23_time],
-                                   [workstation2, workstation3], debug, DELETION_POINT,alternate)
+                                   [workstation2, workstation3], debug, DELETION_POINT, alternate)
 
             env.run(until=MAX_MINUTES)
             print("Finished Run", i + 1)
@@ -233,6 +234,17 @@ if __name__ == "__main__":
         ws2_prods_conf = generate_confidence(ws2_products)
         ws3_prods_conf = generate_confidence(ws3_products)
 
+        std_insp1_wait = stdev(insp1_wait)
+        std_insp2_wait = stdev(insp2_wait)
+
+        std_ws1_wait = stdev(ws1_wait)
+        std_ws2_wait = stdev(ws2_wait)
+        std_ws3_wait = stdev(ws3_wait)
+
+        std_ws1_prods = stdev(ws1_products)
+        std_ws2_prods = stdev(ws2_products)
+        std_ws3_prods = stdev(ws3_products)
+
         print(inspector1.name, " wait time: ", avg_insp1_wait)
         print(inspector1.name, " wait time confidence intervals: ", insp1_wait_conf[:2])
         print(inspector2.name, " wait time: ", avg_insp2_wait)
@@ -240,6 +252,9 @@ if __name__ == "__main__":
         print("")
         print(inspector1.name, " wait time percent: ", avg_insp1_wait / MAX_MINUTES)
         print(inspector2.name, " wait time percent: ", avg_insp2_wait / MAX_MINUTES)
+        print("")
+        print(inspector1.name, " wait time standard deviation: ", std_insp1_wait)
+        print(inspector2.name, " wait time standard deviation: ", std_insp2_wait)
         print("")
         if debug:
             for i in [inspector1, inspector2]:
@@ -249,11 +264,16 @@ if __name__ == "__main__":
             print("")
         print(workstation1.name, " wait time: ", avg_ws1_wait)
         print(workstation1.name, " wait time confidence intervals: ", ws1_wait_conf[:2])
-        print(workstation2.name, " wait time: ", avg_ws2_wait)
+        print(workstation1.name, " wait time: ", avg_ws2_wait)
         print(workstation2.name, " wait time confidence intervals: ", ws2_wait_conf[:2])
         print(workstation3.name, " wait time: ", avg_ws3_wait)
         print(workstation3.name, " wait time confidence intervals: ", ws3_wait_conf[:2])
         print("")
+        print(workstation1.name, " wait time standard deviation: ", std_ws1_wait)
+        print(workstation2.name, " wait time standard deviation: ", std_ws2_wait)
+        print(workstation3.name, " wait time standard deviation: ", std_ws3_wait)
+        print("")
+
         if debug:
             for w in [workstation1, workstation2, workstation3]:
                 print("DEBUG: ", w.name, " used:")
@@ -289,6 +309,10 @@ if __name__ == "__main__":
         print("Workstation 2 Products Made Confidence interval: ", ws2_prods_conf[:2])
         print("Workstation 3 Products Made: ", avg_ws3_prods)
         print("Workstation 3 Products Made Confidence interval: ", ws3_prods_conf[:2])
+        print("")
+        print(workstation1.name, " products made time standard deviation: ", std_ws1_prods)
+        print(workstation2.name, " products made time standard deviation: ", std_ws2_prods)
+        print(workstation3.name, " products made time standard deviation: ", std_ws3_prods)
         print("")
         print("Workstation 1 Throughput: ", avg_ws1_prods / MAX_MINUTES)
         print("Workstation 2 Throughput: ", avg_ws2_prods / MAX_MINUTES)
