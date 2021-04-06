@@ -140,18 +140,16 @@ class Inspector:
         """
         min_buffer = 2
 
+        for workstation in self.workstations:  # find buffer with minimal components
+            if component in workstation.buffers.keys() and workstation.buffers[component].level < min_buffer:
+                min_buffer = workstation.buffers[component].level
+
         if not self.alternate:
-            for workstation in self.workstations:  # find buffer with minimal components
-                if component in workstation.buffers.keys() and workstation.buffers[component].level < min_buffer:
-                    min_buffer = workstation.buffers[component].level
             for workstation in self.workstations:  # find first workstation with minimal buffer
                 if component in workstation.buffers.keys() and workstation.buffers[component].level == min_buffer:
                     return workstation
         else:
-            for workstation in self.workstations:  # find buffer with minimal components
-                if component in workstation.buffers.keys() and workstation.buffers[component].level < min_buffer:
-                    min_buffer = workstation.buffers[component].level
-            for workstation in self.workstations:  # find first workstation with minimal buffer
+            for workstation in self.workstations:  # find last workstation with minimal buffer
                 if component in workstation.buffers.keys() and workstation.buffers[component].level == min_buffer:
                     temp_w = workstation
             return temp_w

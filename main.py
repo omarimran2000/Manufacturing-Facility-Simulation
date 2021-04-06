@@ -17,7 +17,7 @@ default = False
 debug = False
 plot = False
 sensitivity = False
-alternate = False
+alternate = True
 
 
 def dat_parser(filename: str) -> list:
