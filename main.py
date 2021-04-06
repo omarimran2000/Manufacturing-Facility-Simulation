@@ -265,7 +265,7 @@ if __name__ == "__main__":
             print("")
         print(workstation1.name, " wait time: ", avg_ws1_wait)
         print(workstation1.name, " wait time confidence intervals: ", ws1_wait_conf[:2])
-        print(workstation1.name, " wait time: ", avg_ws2_wait)
+        print(workstation2.name, " wait time: ", avg_ws2_wait)
         print(workstation2.name, " wait time confidence intervals: ", ws2_wait_conf[:2])
         print(workstation3.name, " wait time: ", avg_ws3_wait)
         print(workstation3.name, " wait time confidence intervals: ", ws3_wait_conf[:2])
