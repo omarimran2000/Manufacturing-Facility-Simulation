@@ -1,12 +1,10 @@
 # Manufacturing Facility Simulation
-## Milestone 3
+## SYSC 4005 Project
 ### By: Ryan Gaudreault, Omar Imran, Marcel LeClair
-
 ## Milestone Changes
-For this milestone, the ability to replicate the model and generate confidence intervals was implemented. 
-The ability to plot the products made by each workstation with respect to time was added to find the deletion point.
-A deletion point was added, so the initialization bias can be reduced.
-MatPlotLib and SciPy also need to be installed to run the simulation with instructions below.
+In the final milestone, the alternative policy was implemented. In main.py, there is an instance variable called "alternate" 
+that allows the alternate policy to be run. It is default set to True. The alternate policy changes 
+the priority of where C1 is sent in the case of a tie.
 ## Summary 
 The Manufacturing Facility Simulation was conducted in Python.
 There are two Python files associated with the simulation. The 
