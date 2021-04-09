@@ -36,7 +36,7 @@ type *pip install simpy* , *pip install scipy*, *pip install matplotlib*
 ## Running The Simulation 
  The simulation can be run by using a Python IDE (i.e. PyCharm) or by typing
  *python main.py* in the terminal/command prompt while in the same folder as 
- main.py. This will run the main script and run the simulation until 2500 minutes. 
+ main.py. This will run the main script and run the simulation until 3300 minutes for 50 replications. 
  
  Running on Ubuntu (Debian)
  ```
